@@ -1,16 +1,16 @@
 from markupsafe import escape
-from flask import Flask
+import datetime
+from flask import Flask, abort, render_template
 
 app = Flask(__name__)
 
 @app.route('/')
-@app.route('/index/')
 def hello():
-    return '<h1>Hello, World!</h1>'
+    return render_template('index.html', utc_dt=datetime.datetime.utcnow())
 
 @app.route('/about/')
 def about():
-    return '<h3>This is a Flask web application.</h3>'
+    return render_template('about.html')
 
 @app.route('/capitalize/<word>/')
 def capitalize(word):
@@ -19,3 +19,23 @@ def capitalize(word):
 @app.route('/add/<int:n1>/<int:n2>/')
 def add(n1, n2):
     return '<h1>{}</h1>'.format(n1 + n2)
+
+@app.route('/users/<int:user_id>/')
+def greet_user(user_id):
+    users = ['Bob', 'Jane', 'Adam']
+    #return '<h2>Hi {}</h2>'.format(users[user_id])
+    try:
+        return '<h2>Hi {}</h2>'.format(users[user_id])
+    except IndexError:
+        abort(404)
+
+@app.route('/comments/')
+def comments():
+    comments = ['Planning',
+                'Requirements',
+                'Design and Prototype',
+                'Software Development',
+                'Testing',
+                'Deployment',
+                'Maintenance']
+    return render_template('comments.html', comments=comments)
