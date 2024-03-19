@@ -28,3 +28,14 @@ def greet_user(user_id):
         return '<h2>Hi {}</h2>'.format(users[user_id])
     except IndexError:
         abort(404)
+
+@app.route('/comments/')
+def comments():
+    comments = ['Planning',
+                'Requirements',
+                'Design and Prototype',
+                'Software Development',
+                'Testing',
+                'Deployment',
+                'Maintenance']
+    return render_template('comments.html', comments=comments)
